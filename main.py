@@ -9,7 +9,7 @@ from langchain.chains import ConversationalRetrievalChain
 from PyPDF2 import PdfReader
 from langchain_nomic import NomicEmbeddings
 from pydantic import BaseModel, Field
-from typing import Optional
+from typing import Optional , List
 from langchain_core.prompts import ChatPromptTemplate
 import streamlit as st
 from langchain_google_genai import GoogleGenerativeAI
@@ -54,7 +54,7 @@ class rag:
             text+=page.extract_text()
         return text
 
-    def text_splitter(self,text):
+    def text_splitter(self,text : str) -> List:
         splitter=CharacterTextSplitter(
             separator="\n",
             chunk_overlap=500,            
@@ -63,7 +63,7 @@ class rag:
         )
         return splitter.split_text(text)
 
-    def vectorstore(self,chunk):
+    def vectorstore(self,chunk : str):
         embedding=NomicEmbeddings(model="nomic-embed-text-v1.5")
         vectorstore=FAISS.from_texts(embedding=embedding,texts=chunk)
         return vectorstore
@@ -134,9 +134,11 @@ Thought:{agent_scratchpad}
     output=agent_executor.invoke({"input":input_llm})
     return output["output"]
 
+class chatbot(BaseModel):
+    textinput : dict
 
 @app.post("/chatbot")
-def chatbot(textinput : dict) :
+def chatbot(textinput : chatbot) :
     text_input=textinput.get("input")
     output_func=agent_func(text_input)
     return {"output":output_func}
