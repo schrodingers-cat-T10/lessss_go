@@ -46,7 +46,7 @@ export default function NewCube() {
       
 
     const updatetext = (inputtext) =>{
-        axios.post("http://localhost:8000/chatbot",{input : inputtext}).then(res => {
+        axios.post("https://test20578.anganwaditest.co.in/chatbot",{input : inputtext}).then(res => {
         speech(res.data.output)
         updateinput("");
         } ).catch(err => console.error(err))
