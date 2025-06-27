@@ -18,6 +18,7 @@ from dotenv import load_dotenv
 import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from mangum import Mangum
 
 app=FastAPI()
 
@@ -54,7 +55,7 @@ class rag:
             text+=page.extract_text()
         return text
 
-    def text_splitter(self,text : str) -> List:
+    def text_splitter(self,text : str):
         splitter=CharacterTextSplitter(
             separator="\n",
             chunk_overlap=500,            
@@ -77,7 +78,7 @@ class rag:
                                                           retriever=vectorstore.as_retriever())
         return conversational_chain
     
-    def main(self,prompt : str) -> str:
+    def main(self,prompt : str):
         text = self.context_rer()
         chunk = self.text_splitter(text)
         vectorstore = self.vectorstore(chunk)
@@ -143,5 +144,6 @@ def chatbot(textinput : chatbot) :
     output_func=agent_func(text_input)
     return {"output":output_func}
 
+handler = Mangum(app)
 
 

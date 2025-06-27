@@ -36,6 +36,7 @@ export default function NewCube() {
         recognition.onresult = (event)=>{
             const speechtext = event.results[0][0].transcript;
             updateinput(speechtext);
+            console.log(speechtext);
             updatetext(speechtext); 
         }
 
@@ -46,7 +47,9 @@ export default function NewCube() {
       
 
     const updatetext = (inputtext) =>{
-        axios.post("https://test20578.anganwaditest.co.in/chatbot",{input : inputtext}).then(res => {
+      console.log("Input Text",inputtext)
+        axios.post("https://test20578.anganwaditest.co.in/chatbot",{textinput: {input: inputtext}}).then(res => {
+          console.log("api success")
         speech(res.data.output)
         updateinput("");
         } ).catch(err => console.error(err))

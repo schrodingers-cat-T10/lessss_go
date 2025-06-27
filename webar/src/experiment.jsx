@@ -11,7 +11,7 @@ function Experiment() {
       <button onClick={() => store.enterAR()}>Enter AR</button>
       <Canvas>
         <XR store={store}>
-          <Model/>
+          <NewCube/>
         </XR>
       </Canvas>
     </>
